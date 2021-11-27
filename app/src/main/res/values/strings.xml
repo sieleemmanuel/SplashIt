@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">SplashIt</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="image_content_description">Loaded Image</string>
+    <string name="image_name_text">Image Name</string>
+</resources>
