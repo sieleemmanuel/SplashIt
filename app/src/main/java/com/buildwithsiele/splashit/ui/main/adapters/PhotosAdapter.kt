@@ -11,7 +11,7 @@ import com.buildwithsiele.splashit.R
 import com.buildwithsiele.splashit.data.model.Photo
 import com.squareup.picasso.Picasso
 
-class PhotosAdapter : RecyclerView.Adapter<PhotosAdapter.ImagesViewHolder>() {
+class PhotosAdapter (private val itemClickListener: ItemClickListener): RecyclerView.Adapter<PhotosAdapter.ImagesViewHolder>() {
 
     var photosList = listOf<Photo>()
         @SuppressLint("NotifyDataSetChanged")
@@ -36,9 +36,16 @@ class PhotosAdapter : RecyclerView.Adapter<PhotosAdapter.ImagesViewHolder>() {
         )
     }
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
-        val image = photosList[position]
-        holder.imageName.text = image.id
-        Picasso.get().load(image.urls.imageUrl).into(holder.imageView)
+        val photo = photosList[position]
+        holder.imageName.text = photo.id
+        Picasso.get().load(photo.urls.urlSmall).into(holder.imageView)
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(photo,position)
+        }
     }
     override fun getItemCount(): Int = photosList.size
+
+    class ItemClickListener(val clickListener:(photo:Photo,position: Int)->Unit){
+        fun onClick(photo: Photo, position: Int) = clickListener(photo,position)
+    }
 }
