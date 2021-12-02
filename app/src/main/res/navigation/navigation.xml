@@ -8,7 +8,7 @@
     <fragment
         android:id="@+id/listImages"
         android:name="com.buildwithsiele.splashit.ui.main.view.ListPhotos"
-        android:label="fragment_list_images"
+        android:label="Unsplash Photos"
         tools:layout="@layout/fragment_list_photos" >
         <action
             android:id="@+id/action_listImages_to_imageDetails"
@@ -26,7 +26,7 @@
     <fragment
         android:id="@+id/imageDetails"
         android:name="com.buildwithsiele.splashit.ui.main.view.PhotoDetails"
-        android:label="image_details_fragment"
+        android:label="Photo Details"
         tools:layout="@layout/photo_details_fragment" >
         <action
             android:id="@+id/action_imageDetails_to_listImages"
