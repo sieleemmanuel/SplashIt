@@ -13,7 +13,7 @@
         tools:context=".ui.main.view.PhotoDetails">
 
         <androidx.viewpager2.widget.ViewPager2
-            android:id="@+id/imageViewpager"
+            android:id="@+id/photoViewpager"
             android:layout_width="0dp"
             android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="parent"

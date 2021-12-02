@@ -1,13 +1,22 @@
 package com.buildwithsiele.splashit.ui.main.adapters
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.buildwithsiele.splashit.R
+import com.buildwithsiele.splashit.data.model.Photo
+import com.squareup.picasso.Picasso
 
-class ViewPagerAdapter(private val imagesList: MutableList<Int>):RecyclerView.Adapter<ViewPagerAdapter.ViewPagerHolder>() {
+class ViewPagerAdapter:RecyclerView.Adapter<ViewPagerAdapter.ViewPagerHolder>() {
+    var photoList= listOf<Photo>()
+    @SuppressLint("NotifyDataSetChanged")
+    set(value) {
+        field=value
+        notifyDataSetChanged()
+    }
     class ViewPagerHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         val imageView:ImageView = itemView.findViewById(R.id.imagePager)
 
@@ -18,11 +27,12 @@ class ViewPagerAdapter(private val imagesList: MutableList<Int>):RecyclerView.Ad
     }
 
     override fun onBindViewHolder(holder: ViewPagerHolder, position: Int) {
-        val currentImage = imagesList[position]
-        holder.imageView.setImageResource(currentImage)
+        val currentImage = photoList[position]
+        Picasso.get().load(currentImage.urls.urlRegular).into(holder.imageView)
+//        holder.imageView.setImageResource(currentImage)
 
     }
 
-    override fun getItemCount(): Int = imagesList.size
+    override fun getItemCount(): Int = photoList.size
 
 }

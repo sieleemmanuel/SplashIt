@@ -25,7 +25,9 @@ data class Photo(
 
 data class UnsplashURL(
     @SerializedName("small")
-    val imageUrl: String
+    val urlSmall: String,
+    @SerializedName("regular")
+    val urlRegular: String
 )
 
 class Converter {
