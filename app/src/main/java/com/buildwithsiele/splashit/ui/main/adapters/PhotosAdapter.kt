@@ -1,4 +1,4 @@
-package com.buildwithsiele.splashit.ui.main.adapter
+package com.buildwithsiele.splashit.ui.main.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -8,12 +8,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.buildwithsiele.splashit.R
-import com.buildwithsiele.splashit.data.model.Image
+import com.buildwithsiele.splashit.data.model.Photo
 import com.squareup.picasso.Picasso
 
-class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
+class PhotosAdapter : RecyclerView.Adapter<PhotosAdapter.ImagesViewHolder>() {
 
-    var ImagesList = listOf<Image>()
+    var photosList = listOf<Photo>()
         @SuppressLint("NotifyDataSetChanged")
         set(value) {
             field = value
@@ -34,14 +34,11 @@ class ImagesAdapter : RecyclerView.Adapter<ImagesAdapter.ImagesViewHolder>() {
                 false
             )
         )
-
     }
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
-        val image = ImagesList[position]
+        val image = photosList[position]
         holder.imageName.text = image.id
-
         Picasso.get().load(image.urls.imageUrl).into(holder.imageView)
-        /*holder.imageView.setImageResource(image.urls.imageUrl)*/
     }
-    override fun getItemCount(): Int = ImagesList.size
+    override fun getItemCount(): Int = photosList.size
 }

@@ -1,6 +1,6 @@
 package com.buildwithsiele.splashit.data.network
 
-import com.buildwithsiele.splashit.data.model.Image
+import com.buildwithsiele.splashit.data.model.Photo
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
@@ -30,7 +30,7 @@ interface ApiService {
     suspend fun getPhotos(
         @Query("per_page") per_page:Int = 30,
         @Query("client_id") clientId: String = "Y7Eo8c546fG_BeKByFyoYucQhSjAjDkz1kM3YZHVrnE"
-    ): List<Image>
+    ): List<Photo>
 }
 
 object PhotosApi {

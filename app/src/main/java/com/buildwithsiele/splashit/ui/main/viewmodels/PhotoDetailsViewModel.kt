@@ -1,13 +1,11 @@
-package com.buildwithsiele.splashit.ui.main.viewmodel
+package com.buildwithsiele.splashit.ui.main.viewmodels
 
 import android.annotation.SuppressLint
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.ViewModel
 import com.buildwithsiele.splashit.R
 
-class ImageDetailsViewModel(application: Application) : AndroidViewModel(application) {
+class PhotoDetailsViewModel(application: Application) : AndroidViewModel(application) {
     @SuppressLint("UseCompatLoadingForDrawables")
     val imageList = mutableListOf(
         R.drawable.splash_background,

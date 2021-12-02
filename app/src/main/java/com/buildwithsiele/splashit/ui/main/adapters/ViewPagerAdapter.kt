@@ -1,4 +1,4 @@
-package com.buildwithsiele.splashit.ui.main.adapter
+package com.buildwithsiele.splashit.ui.main.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -14,7 +14,7 @@ class ViewPagerAdapter(private val imagesList: MutableList<Int>):RecyclerView.Ad
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewPagerHolder {
-    return ViewPagerHolder(LayoutInflater.from(parent.context).inflate(R.layout.image_pager,parent,false))
+    return ViewPagerHolder(LayoutInflater.from(parent.context).inflate(R.layout.photo_pager,parent,false))
     }
 
     override fun onBindViewHolder(holder: ViewPagerHolder, position: Int) {

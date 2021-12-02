@@ -6,14 +6,14 @@
     <data>
         <variable
             name="viewmodel"
-            type="com.buildwithsiele.splashit.ui.listimages.ListImagesViewModel" />
+            type="com.buildwithsiele.splashit.ui.main.viewmodels.ListImagesViewModel" />
 
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.view.ListImages">
+        tools:context=".ui.main.view.ListPhotos">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
