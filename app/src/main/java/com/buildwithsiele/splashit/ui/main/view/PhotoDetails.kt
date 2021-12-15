@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.buildwithsiele.splashit.R
 import com.buildwithsiele.splashit.data.database.PhotosDatabase
 import com.buildwithsiele.splashit.databinding.PhotoDetailsFragmentBinding
-import com.buildwithsiele.splashit.ui.main.adapters.ViewPagerAdapter
+import com.buildwithsiele.splashit.adapters.ViewPagerAdapter
 import com.buildwithsiele.splashit.ui.main.viewmodels.PhotoDetailsViewModel
 import com.buildwithsiele.splashit.ui.main.viewmodels.PhotoDetailsViewModelFactory
 
