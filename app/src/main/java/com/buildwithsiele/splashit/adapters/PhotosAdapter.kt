@@ -1,4 +1,4 @@
-package com.buildwithsiele.splashit.ui.main.adapters
+package com.buildwithsiele.splashit.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
@@ -6,12 +6,15 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.buildwithsiele.splashit.R
 import com.buildwithsiele.splashit.data.model.Photo
 import com.squareup.picasso.Picasso
 
-class PhotosAdapter (private val itemClickListener: ItemClickListener): RecyclerView.Adapter<PhotosAdapter.ImagesViewHolder>() {
+class PhotosAdapter (private val itemClickListener: ItemClickListener)
+    : PagingDataAdapter<Photo,PhotosAdapter.ImagesViewHolder>(DiffUtilCallback()) {
 
     var photosList = listOf<Photo>()
         @SuppressLint("NotifyDataSetChanged")
@@ -36,16 +39,26 @@ class PhotosAdapter (private val itemClickListener: ItemClickListener): Recycler
         )
     }
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
-        val photo = photosList[position]
-        holder.imageName.text = photo.id
-        Picasso.get().load(photo.urls.urlSmall).into(holder.imageView)
+        val photo = getItem(position)
+        holder.imageName.text = photo?.id
+        Picasso.get().load(photo?.urls?.urlSmall).into(holder.imageView)
         holder.itemView.setOnClickListener {
-            itemClickListener.onClick(photo,position)
+            itemClickListener.onClick(photo!!,position)
         }
     }
-    override fun getItemCount(): Int = photosList.size
 
     class ItemClickListener(val clickListener:(photo:Photo,position: Int)->Unit){
         fun onClick(photo: Photo, position: Int) = clickListener(photo,position)
+    }
+
+    class DiffUtilCallback:DiffUtil.ItemCallback<Photo>(){
+        override fun areItemsTheSame(oldItem: Photo, newItem: Photo): Boolean {
+            return oldItem.id == newItem.id
+        }
+
+        override fun areContentsTheSame(oldItem: Photo, newItem: Photo): Boolean {
+           return oldItem == newItem
+        }
+
     }
 }

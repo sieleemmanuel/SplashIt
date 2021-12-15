@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.buildwithsiele.splashit.data.database.PhotosDao
+import com.buildwithsiele.splashit.data.network.PhotosApi
 import com.buildwithsiele.splashit.data.repository.MainRepository
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
@@ -21,7 +22,8 @@ class PhotoDetailsViewModel(private val photosDatabase:PhotosDao) : ViewModel() 
         }
     }
     //reference to repository
-    private val photosRepository = MainRepository(photosDatabase)
+    val apiService = PhotosApi.apiService
+    private val photosRepository = MainRepository(photosDatabase,apiService)
     val photoList = photosRepository.photos
 
 

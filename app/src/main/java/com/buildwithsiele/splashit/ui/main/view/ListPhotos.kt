@@ -7,13 +7,18 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.distinctUntilChanged
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.buildwithsiele.splashit.R
 import com.buildwithsiele.splashit.data.database.PhotosDatabase
 import com.buildwithsiele.splashit.databinding.FragmentListPhotosBinding
-import com.buildwithsiele.splashit.ui.main.adapters.PhotosAdapter
+import com.buildwithsiele.splashit.adapters.PhotosAdapter
+import com.buildwithsiele.splashit.data.network.PhotosApi
+import com.buildwithsiele.splashit.data.repository.MainRepository
 import com.buildwithsiele.splashit.ui.main.viewmodels.ListImagesViewModel
 import com.buildwithsiele.splashit.ui.main.viewmodels.ListImagesViewModelFactory
+import kotlinx.coroutines.launch
 
 
 class ListPhotos : Fragment() {
@@ -30,7 +35,9 @@ class ListPhotos : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_list_photos, container, false)
 
         val database = PhotosDatabase.getInstance(requireContext()).photosDao
-        val viewModelFactory = ListImagesViewModelFactory(database)
+        val apiService = PhotosApi.apiService
+
+        val viewModelFactory = ListImagesViewModelFactory(database,apiService)
         viewModel = ViewModelProvider(this, viewModelFactory)[ListImagesViewModel::class.java]
 
         itemClickListener = PhotosAdapter.ItemClickListener { photo,position ->
@@ -45,14 +52,26 @@ class ListPhotos : Fragment() {
         adapter = PhotosAdapter(itemClickListener)
         binding.recyclerView.adapter = adapter
 
-        viewModel.photos.observe(viewLifecycleOwner, {
+        /*viewModel.photos.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {
                 binding.loadingBar.visibility = View.GONE
                 adapter.photosList = it
             }
-        })
+        })*/
+        setUpAdapterData()
         return binding.root
     }
 
+    private fun setUpAdapterData() {
+            viewModel.fetchPhotosLiveData().observe(viewLifecycleOwner,{
+                lifecycleScope.launchWhenCreated {
+                    if (it !=null)
+                        binding.loadingBar.visibility = View.GONE
+                    adapter.submitData(it)
+                }
+            })
+        }
 
-}
+
+    }
+
