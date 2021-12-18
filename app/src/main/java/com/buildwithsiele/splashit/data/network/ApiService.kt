@@ -28,6 +28,7 @@ private val retrofit = Retrofit.Builder()
 interface ApiService {
     @GET("photos")
     suspend fun getPhotos(
+        @Query("page") page:Int = 1,
         @Query("per_page") per_page:Int = 30,
         @Query("client_id") clientId: String = "Y7Eo8c546fG_BeKByFyoYucQhSjAjDkz1kM3YZHVrnE"
     ): List<Photo>

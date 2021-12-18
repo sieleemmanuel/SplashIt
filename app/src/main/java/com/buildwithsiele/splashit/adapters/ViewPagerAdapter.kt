@@ -1,4 +1,4 @@
-package com.buildwithsiele.splashit.ui.main.adapters
+package com.buildwithsiele.splashit.adapters
 
 import android.annotation.SuppressLint
 import android.view.LayoutInflater
