@@ -1,17 +1,24 @@
 package com.buildwithsiele.splashit.ui.main.viewmodels
 
 import android.util.Log
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import androidx.paging.ExperimentalPagingApi
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import com.buildwithsiele.splashit.data.database.PhotosDao
+import com.buildwithsiele.splashit.data.database.PhotosDatabase
+import com.buildwithsiele.splashit.data.model.Photo
 import com.buildwithsiele.splashit.data.network.PhotosApi
-import com.buildwithsiele.splashit.data.repository.MainRepository
+import com.buildwithsiele.splashit.data.repositories.MainRepository
 import kotlinx.coroutines.launch
 import java.lang.IllegalArgumentException
 
-class PhotoDetailsViewModel(private val photosDatabase:PhotosDao) : ViewModel() {
-    init {
+@ExperimentalPagingApi
+class PhotoDetailsViewModel(photosDatabase:PhotosDatabase) : ViewModel() {
+   /* init {
         viewModelScope.launch {
             try {
                 photosRepository.updatePhotoList()
@@ -20,23 +27,22 @@ class PhotoDetailsViewModel(private val photosDatabase:PhotosDao) : ViewModel() 
             }
 
         }
-    }
+    }*/
     //reference to repository
-    val apiService = PhotosApi.apiService
+   private val apiService = PhotosApi.apiService
     private val photosRepository = MainRepository(photosDatabase,apiService)
-    val photoList = photosRepository.photos
 
+    val photosList = fetchPhotosLiveData()
 
+    private fun fetchPhotosLiveData(): LiveData<PagingData<Photo>> {
+        return photosRepository.getPhotosResultsStream()
+            .cachedIn(viewModelScope)
 
-/* @SuppressLint("UseCompatLoadingForDrawables")
- v imageList = mutableListOf(
-     R.drawable.splash_background,
-     R.drawable.ic_launcher_background,
-     R.drawable.ic_launcher_foreground,
-     R.drawable.ic_search_black_24dp
- )*/
+    }
+
 }
-class PhotoDetailsViewModelFactory(val photosDatabase: PhotosDao):ViewModelProvider.Factory{
+@ExperimentalPagingApi
+class PhotoDetailsViewModelFactory(private val photosDatabase: PhotosDatabase):ViewModelProvider.Factory{
  override fun <T : ViewModel> create(modelClass: Class<T>): T {
      if(modelClass.isAssignableFrom(PhotoDetailsViewModel::class.java)){
          return PhotoDetailsViewModel(photosDatabase) as T
