@@ -7,13 +7,16 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.paging.ExperimentalPagingApi
 import com.buildwithsiele.splashit.R
+import com.buildwithsiele.splashit.adapters.ViewPagerAdapter
 import com.buildwithsiele.splashit.data.database.PhotosDatabase
 import com.buildwithsiele.splashit.databinding.PhotoDetailsFragmentBinding
-import com.buildwithsiele.splashit.adapters.ViewPagerAdapter
 import com.buildwithsiele.splashit.ui.main.viewmodels.PhotoDetailsViewModel
 import com.buildwithsiele.splashit.ui.main.viewmodels.PhotoDetailsViewModelFactory
 
+@ExperimentalPagingApi
 class PhotoDetails : Fragment() {
     private lateinit var viewModel: PhotoDetailsViewModel
     private lateinit var binding: PhotoDetailsFragmentBinding
@@ -26,9 +29,10 @@ class PhotoDetails : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.photo_details_fragment, container, false)
-        val dataSource = PhotosDatabase.getInstance(requireContext()).photosDao
+        val dataSource = PhotosDatabase.getInstance(requireContext())
         val viewModelProviderFactory = PhotoDetailsViewModelFactory(dataSource)
-        viewModel = ViewModelProvider(this,viewModelProviderFactory)[PhotoDetailsViewModel::class.java]
+        viewModel =
+            ViewModelProvider(this, viewModelProviderFactory)[PhotoDetailsViewModel::class.java]
 
         // val currentPhotoId = argument.getString("photo_id")!!
         argument = requireArguments()
@@ -37,10 +41,13 @@ class PhotoDetails : Fragment() {
         binding.photoViewpager.adapter = adapter
 
 
-        viewModel.photoList.observe(viewLifecycleOwner, {
-            adapter.photoList = it
-            binding.photoViewpager.setCurrentItem(currentPhotoPosition,true)
+        viewModel.photosList.observe(viewLifecycleOwner, {
+            lifecycleScope.launchWhenCreated {
+                adapter.submitData(it)
+                binding.photoViewpager.setCurrentItem(currentPhotoPosition, true)
+            }
         })
+
         return binding.root
     }
 

@@ -1,4 +1,4 @@
-package com.buildwithsiele.splashit.data
+package com.buildwithsiele.splashit.data.repositories
 
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -12,7 +12,7 @@ class PagingPhotoSource(private val apiService: ApiService): PagingSource<Int,Ph
     }
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
-       val page = params.key?:DEFAULT_PAGE_INDEX
+       val page = params.key?: DEFAULT_PAGE_INDEX
         return try {
             val response = apiService.getPhotos(page = page)
             LoadResult.Page(

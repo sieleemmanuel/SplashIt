@@ -2,25 +2,24 @@ package com.buildwithsiele.splashit.ui.main.viewmodels
 
 import android.util.Log
 import androidx.lifecycle.*
+import androidx.paging.ExperimentalPagingApi
 import androidx.paging.PagingData
 import androidx.paging.cachedIn
-import androidx.paging.map
 import com.buildwithsiele.splashit.data.database.PhotosDao
+import com.buildwithsiele.splashit.data.database.PhotosDatabase
 import com.buildwithsiele.splashit.data.model.Photo
 import com.buildwithsiele.splashit.data.network.ApiService
-import com.buildwithsiele.splashit.data.network.PhotosApi
-import com.buildwithsiele.splashit.data.repository.MainRepository
+import com.buildwithsiele.splashit.data.repositories.MainRepository
 import kotlinx.coroutines.launch
 
-class ListImagesViewModel(photosDatabase: PhotosDao, apiService: ApiService): ViewModel() {
+@ExperimentalPagingApi
+class ListImagesViewModel(photosDatabase: PhotosDatabase, apiService: ApiService): ViewModel() {
     //reference to repository
 
     init {
         updateDataFromRepository()
     }
-    val photosRepository = MainRepository(photosDatabase,apiService)
-    val photos = photosRepository.photos
-
+    private val photosRepository = MainRepository(photosDatabase,apiService)
     private fun updateDataFromRepository(){
         viewModelScope.launch {
             try {
@@ -39,7 +38,8 @@ class ListImagesViewModel(photosDatabase: PhotosDao, apiService: ApiService): Vi
     }
 
 }
-class ListImagesViewModelFactory(private val photosDatabase: PhotosDao, val apiService: ApiService):ViewModelProvider.Factory{
+@ExperimentalPagingApi
+class ListImagesViewModelFactory(private val photosDatabase: PhotosDatabase, val apiService: ApiService):ViewModelProvider.Factory{
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ListImagesViewModel::class.java)) {
             return ListImagesViewModel(photosDatabase,apiService) as T

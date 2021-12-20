@@ -1,41 +1,40 @@
-package com.buildwithsiele.splashit.data.repository
+package com.buildwithsiele.splashit.data.repositories
 
 import androidx.lifecycle.LiveData
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
-import androidx.paging.liveData
-import com.buildwithsiele.splashit.data.PagingPhotoSource
+import androidx.paging.*
 import com.buildwithsiele.splashit.data.database.PhotosDao
+import com.buildwithsiele.splashit.data.database.PhotosDatabase
 import com.buildwithsiele.splashit.data.model.Photo
 import com.buildwithsiele.splashit.data.network.ApiService
 import com.buildwithsiele.splashit.data.network.PhotosApi
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
-class MainRepository(private val photosDatabase: PhotosDao, val apiService: ApiService) {
+@ExperimentalPagingApi
+class MainRepository(private val photosDatabase: PhotosDatabase, val apiService: ApiService) {
 
 
     suspend fun updatePhotoList(){
        withContext(Dispatchers.IO){
        val photoList =  PhotosApi.apiService.getPhotos( per_page = PAGE_SIZE
             )
-           for (photo in photoList)
-           photosDatabase.insertPhotos(photo)
+           //for (photo in photoList)
+           photosDatabase.photosDao.insertPhotos(photoList)
         }
     }
-    val photos = photosDatabase.getAllPhotos()
 
     fun getPhotosResultsStream():LiveData<PagingData<Photo>>{
         return Pager(
             config = PagingConfig(PAGE_SIZE,enablePlaceholders = false),
             pagingSourceFactory = {
              PagingPhotoSource(apiService)
-            }
+            },
+            remoteMediator = PhotosMediator(photosDatabase,apiService)
         ).liveData
 
     }
     companion object{
         const val PAGE_SIZE = 50
+        const val DEFAULT_PAGE_INDEX = 1
     }
 }
