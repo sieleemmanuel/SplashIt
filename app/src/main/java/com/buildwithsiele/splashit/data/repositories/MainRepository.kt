@@ -11,8 +11,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
 @ExperimentalPagingApi
-class MainRepository(private val photosDatabase: PhotosDatabase, val apiService: ApiService) {
-
+class MainRepository(private val photosDatabase: PhotosDatabase, private val apiService: ApiService) {
 
     suspend fun updatePhotoList(){
        withContext(Dispatchers.IO){
@@ -24,17 +23,17 @@ class MainRepository(private val photosDatabase: PhotosDatabase, val apiService:
     }
 
     fun getPhotosResultsStream():LiveData<PagingData<Photo>>{
+        val pagingSourceFactory = { photosDatabase.photosDao.getAllPhotos() }
+        val pagingConfig = PagingConfig(PAGE_SIZE,enablePlaceholders = false)
         return Pager(
-            config = PagingConfig(PAGE_SIZE,enablePlaceholders = false),
-            pagingSourceFactory = {
-             PagingPhotoSource(apiService)
-            },
-            remoteMediator = PhotosMediator(photosDatabase,apiService)
+            config = pagingConfig,
+            remoteMediator = PhotosMediator(photosDatabase,apiService),
+            pagingSourceFactory = pagingSourceFactory
         ).liveData
 
     }
     companion object{
-        const val PAGE_SIZE = 50
+        const val PAGE_SIZE = 7
         const val DEFAULT_PAGE_INDEX = 1
     }
 }
