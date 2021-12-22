@@ -59,24 +59,24 @@ class PhotosMediator(
         }
     }
 
-    suspend fun getKeyPagedData(loadType: LoadType, state: PagingState<Int, Photo>):Any?{
+    private suspend fun getKeyPagedData(loadType: LoadType, state: PagingState<Int, Photo>):Any?{
         return when (loadType) {
             LoadType.REFRESH -> {
                 val remoteKey = getClosestRemoteKey(state)
                 remoteKey?.nextKey?.minus(1)?:DEFAULT_PAGE_INDEX
             }
             LoadType.PREPEND -> {
-                val remoteKey = getFirstRemoteKey(state)
+              /*  val remoteKey = getFirstRemoteKey(state)
                     ?: throw InvalidObjectException("Invalid  state, Key should not be null")
                 //end of list condition reached
-                remoteKey.prevKey?:return MediatorResult.Success(endOfPaginationReached = true)
-                remoteKey.prevKey
+                remoteKey.prevKey?:*/return MediatorResult.Success(endOfPaginationReached = true)
+               /* remoteKey.prevKey*/
             }
             LoadType.APPEND -> {
                 val remoteKey = getLastRemoteKey(state)
                     ?:throw InvalidObjectException("Remote Key Should not be null for $loadType")
                 remoteKey.nextKey ?:return MediatorResult.Success(endOfPaginationReached = true)
-                remoteKey.nextKey
+               /* remoteKey.nextKey*/
             }
         }
     }

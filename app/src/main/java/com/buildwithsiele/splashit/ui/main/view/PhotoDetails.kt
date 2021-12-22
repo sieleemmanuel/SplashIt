@@ -7,8 +7,11 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.ExperimentalPagingApi
+import androidx.paging.flatMap
+import androidx.paging.map
 import com.buildwithsiele.splashit.R
 import com.buildwithsiele.splashit.adapters.ViewPagerAdapter
 import com.buildwithsiele.splashit.data.database.PhotosDatabase
@@ -41,10 +44,14 @@ class PhotoDetails : Fragment() {
         binding.photoViewpager.adapter = adapter
 
 
-        viewModel.photosList.observe(viewLifecycleOwner, {
+        viewModel.photosList.distinctUntilChanged().observe(viewLifecycleOwner, {
             lifecycleScope.launchWhenCreated {
-                adapter.submitData(it)
-                binding.photoViewpager.setCurrentItem(currentPhotoPosition, true)
+
+                it.map {
+                    val photos = listOf(it)
+                    adapter.submitList(photos)
+                    binding.photoViewpager.setCurrentItem(currentPhotoPosition, true)
+                }
             }
         })
 

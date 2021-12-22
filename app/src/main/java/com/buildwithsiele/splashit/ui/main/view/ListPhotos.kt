@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.distinctUntilChanged
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
@@ -55,22 +56,21 @@ class ListPhotos : Fragment() {
         loaderStateAdapter = LoaderStateAdapter { adapter.retry() }
         binding.recyclerView.adapter = adapter.withLoadStateFooter(loaderStateAdapter)
 
-        /*viewModel.photos.observe(viewLifecycleOwner, {
-            if (it.isNotEmpty()) {
-                binding.loadingBar.visibility = View.GONE
-                adapter.photosList = it
-            }
-        })*/
         setUpAdapterData()
         return binding.root
     }
 
     private fun setUpAdapterData() {
-        viewModel.fetchPhotosLiveData().observe(viewLifecycleOwner, {
+        viewModel.fetchPhotosLiveData().distinctUntilChanged().observe(viewLifecycleOwner, {
             lifecycleScope.launchWhenCreated {
-                if (it != null)
+                if (it != null) {
                     binding.loadingBar.visibility = View.GONE
-                adapter.submitData(it)
+                    adapter.submitData(it)
+
+                    val snapshotList = adapter.snapshot()
+                } else{
+                    binding.loadingBar.visibility = View.VISIBLE
+                }
             }
         })
     }

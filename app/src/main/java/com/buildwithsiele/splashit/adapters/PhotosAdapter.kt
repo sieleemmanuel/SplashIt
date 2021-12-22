@@ -41,7 +41,7 @@ class PhotosAdapter (private val itemClickListener: ItemClickListener)
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
         val photo = getItem(position)
         holder.imageName.text = photo?.id
-        Picasso.get().load(photo?.urls?.urlSmall).into(holder.imageView)
+        Picasso.get().load(photo?.urls?.urlSmall).placeholder(R.drawable.progress_animation).into(holder.imageView)
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(photo!!,position)
         }

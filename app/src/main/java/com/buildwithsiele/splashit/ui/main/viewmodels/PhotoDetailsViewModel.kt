@@ -18,16 +18,6 @@ import java.lang.IllegalArgumentException
 
 @ExperimentalPagingApi
 class PhotoDetailsViewModel(photosDatabase:PhotosDatabase) : ViewModel() {
-   /* init {
-        viewModelScope.launch {
-            try {
-                photosRepository.updatePhotoList()
-            }catch (e:Exception){
-                Log.d("ViewModel", "Error: ${e.message} ")
-            }
-
-        }
-    }*/
     //reference to repository
    private val apiService = PhotosApi.apiService
     private val photosRepository = MainRepository(photosDatabase,apiService)

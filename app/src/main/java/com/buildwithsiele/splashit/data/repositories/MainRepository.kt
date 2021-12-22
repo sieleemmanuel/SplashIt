@@ -33,7 +33,7 @@ class MainRepository(private val photosDatabase: PhotosDatabase, private val api
 
     }
     companion object{
-        const val PAGE_SIZE = 7
+        const val PAGE_SIZE = 20
         const val DEFAULT_PAGE_INDEX = 1
     }
 }
