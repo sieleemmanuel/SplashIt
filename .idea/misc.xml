@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/layout/image_details_fragment.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/layout/image_item.xml" value="0.21145833333333333" />
         <entry key="app/src/main/res/layout/image_pager.xml" value="0.21145833333333333" />
+        <entry key="app/src/main/res/layout/item_photo_loader.xml" value="0.22" />
         <entry key="app/src/main/res/layout/photo_details_fragment.xml" value="0.16111111111111112" />
         <entry key="app/src/main/res/layout/photo_pager.xml" value="0.16111111111111112" />
         <entry key="app/src/main/res/menu/main_menu.xml" value="0.21145833333333333" />

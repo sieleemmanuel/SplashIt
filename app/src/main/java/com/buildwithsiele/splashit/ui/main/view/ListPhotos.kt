@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.paging.ExperimentalPagingApi
 import com.buildwithsiele.splashit.R
+import com.buildwithsiele.splashit.adapters.LoaderStateAdapter
 import com.buildwithsiele.splashit.adapters.PhotosAdapter
 import com.buildwithsiele.splashit.data.database.PhotosDatabase
 import com.buildwithsiele.splashit.data.network.PhotosApi
@@ -24,6 +25,7 @@ class ListPhotos : Fragment() {
     private lateinit var binding: FragmentListPhotosBinding
     private lateinit var viewModel: ListImagesViewModel
     private lateinit var adapter: PhotosAdapter
+    private lateinit var loaderStateAdapter: LoaderStateAdapter
     private lateinit var itemClickListener: PhotosAdapter.ItemClickListener
 
     override fun onCreateView(
@@ -49,7 +51,9 @@ class ListPhotos : Fragment() {
         }
 
         adapter = PhotosAdapter(itemClickListener)
-        binding.recyclerView.adapter = adapter
+
+        loaderStateAdapter = LoaderStateAdapter { adapter.retry() }
+        binding.recyclerView.adapter = adapter.withLoadStateFooter(loaderStateAdapter)
 
         /*viewModel.photos.observe(viewLifecycleOwner, {
             if (it.isNotEmpty()) {

@@ -5,4 +5,6 @@
     <string name="image_content_description">Loaded Image</string>
     <string name="image_name_text">Image Name</string>
     <string name="search_item_title">Search</string>
+    <string name="button_retry">RETRY</string>
+    <string name="label_error">Something when wrong, please try again</string>
 </resources>
