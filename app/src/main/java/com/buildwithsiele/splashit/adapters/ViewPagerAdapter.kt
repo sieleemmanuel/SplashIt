@@ -1,17 +1,19 @@
 package com.buildwithsiele.splashit.adapters
 
-import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.paging.PagingDataAdapter
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.CircularProgressDrawable
 import com.buildwithsiele.splashit.R
 import com.buildwithsiele.splashit.data.model.Photo
 import com.squareup.picasso.Picasso
 
-class ViewPagerAdapter:PagingDataAdapter<Photo,ViewPagerAdapter.ViewPagerHolder>(PhotosAdapter.DiffUtilCallback()) {
+class ViewPagerAdapter:ListAdapter<Photo,ViewPagerAdapter.ViewPagerHolder>(PhotosAdapter.DiffUtilCallback()) {
     class ViewPagerHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
         val imageView:ImageView = itemView.findViewById(R.id.imagePager)
 
@@ -23,7 +25,8 @@ class ViewPagerAdapter:PagingDataAdapter<Photo,ViewPagerAdapter.ViewPagerHolder>
 
     override fun onBindViewHolder(holder: ViewPagerHolder, position: Int) {
         val currentImage = getItem(position)
-        Picasso.get().load(currentImage?.urls?.urlRegular).into(holder.imageView)
+
+        Picasso.get().load(currentImage?.urls?.urlRegular).placeholder(R.drawable.progress_animation).into(holder.imageView)
 //        holder.imageView.setImageResource(currentImage)
 
     }
