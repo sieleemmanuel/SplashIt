@@ -13,15 +13,6 @@ import kotlinx.coroutines.withContext
 @ExperimentalPagingApi
 class MainRepository(private val photosDatabase: PhotosDatabase, private val apiService: ApiService) {
 
-    suspend fun updatePhotoList(){
-       withContext(Dispatchers.IO){
-       val photoList =  PhotosApi.apiService.getPhotos( per_page = PAGE_SIZE
-            )
-           //for (photo in photoList)
-           photosDatabase.photosDao.insertPhotos(photoList)
-        }
-    }
-
     fun getPhotosResultsStream():LiveData<PagingData<Photo>>{
         val pagingSourceFactory = { photosDatabase.photosDao.getAllPhotos() }
         val pagingConfig = PagingConfig(PAGE_SIZE,enablePlaceholders = false)
@@ -32,6 +23,8 @@ class MainRepository(private val photosDatabase: PhotosDatabase, private val api
         ).liveData
 
     }
+
+    val photoList = photosDatabase.photosDao.getPhotosList()
     companion object{
         const val PAGE_SIZE = 20
         const val DEFAULT_PAGE_INDEX = 1
