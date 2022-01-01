@@ -22,14 +22,7 @@ class PhotoDetailsViewModel(photosDatabase:PhotosDatabase) : ViewModel() {
    private val apiService = PhotosApi.apiService
     private val photosRepository = MainRepository(photosDatabase,apiService)
 
-    val photosList = fetchPhotosLiveData()
-
-    private fun fetchPhotosLiveData(): LiveData<PagingData<Photo>> {
-        return photosRepository.getPhotosResultsStream()
-            .cachedIn(viewModelScope)
-
-    }
-
+    val photosList = photosRepository.photoList
 }
 @ExperimentalPagingApi
 class PhotoDetailsViewModelFactory(private val photosDatabase: PhotosDatabase):ViewModelProvider.Factory{

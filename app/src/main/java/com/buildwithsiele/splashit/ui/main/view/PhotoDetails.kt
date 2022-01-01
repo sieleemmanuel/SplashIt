@@ -46,13 +46,9 @@ class PhotoDetails : Fragment() {
 
         viewModel.photosList.distinctUntilChanged().observe(viewLifecycleOwner, {
             lifecycleScope.launchWhenCreated {
-
-                it.map {
-                    val photos = listOf(it)
-                    adapter.submitList(photos)
-                    binding.photoViewpager.setCurrentItem(currentPhotoPosition, true)
+                    adapter.submitList(it)
+                    binding.photoViewpager.setCurrentItem(currentPhotoPosition, false)
                 }
-            }
         })
 
         return binding.root
