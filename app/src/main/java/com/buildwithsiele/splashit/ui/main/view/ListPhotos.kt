@@ -63,14 +63,9 @@ class ListPhotos : Fragment() {
     private fun setUpAdapterData() {
         viewModel.fetchPhotosLiveData().distinctUntilChanged().observe(viewLifecycleOwner, {
             lifecycleScope.launchWhenCreated {
-                if (it != null) {
-                    binding.loadingBar.visibility = View.GONE
-                    adapter.submitData(it)
+                adapter.submitData(it)
+                binding.loadingBar.visibility = View.GONE
 
-                    val snapshotList = adapter.snapshot()
-                } else{
-                    binding.loadingBar.visibility = View.VISIBLE
-                }
             }
         })
     }

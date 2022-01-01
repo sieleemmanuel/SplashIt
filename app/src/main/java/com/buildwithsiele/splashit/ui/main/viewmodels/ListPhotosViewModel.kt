@@ -16,11 +16,11 @@ import kotlinx.coroutines.launch
 class ListImagesViewModel(photosDatabase: PhotosDatabase, apiService: ApiService): ViewModel() {
     //reference to repository
 
-    init {
+    /*init {
         updateDataFromRepository()
-    }
+    }*/
     private val photosRepository = MainRepository(photosDatabase,apiService)
-    private fun updateDataFromRepository(){
+    /*private fun updateDataFromRepository(){
         viewModelScope.launch {
             try {
                 photosRepository.updatePhotoList()
@@ -29,7 +29,7 @@ class ListImagesViewModel(photosDatabase: PhotosDatabase, apiService: ApiService
             }
 
         }
-    }
+    }*/
 
     fun fetchPhotosLiveData():LiveData<PagingData<Photo>>{
         return photosRepository.getPhotosResultsStream()

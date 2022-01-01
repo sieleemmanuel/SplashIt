@@ -26,7 +26,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:spanCount="3"
-            tools:itemCount="20"
             tools:listitem="@layout/image_item" />
 
         <ProgressBar
