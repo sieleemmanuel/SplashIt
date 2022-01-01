@@ -4,11 +4,13 @@ import android.content.Context
 import androidx.room.*
 import com.buildwithsiele.splashit.data.model.Converter
 import com.buildwithsiele.splashit.data.model.Photo
+import com.buildwithsiele.splashit.data.model.RemoteKeys
 
-@Database(entities = [Photo::class],version = 1,exportSchema = false)
+@Database(entities = [Photo::class, RemoteKeys::class], version = 1,exportSchema = false)
 @TypeConverters(Converter::class)
 abstract class PhotosDatabase:RoomDatabase() {
     abstract val photosDao:PhotosDao
+    abstract val repoKeysDao:RemoteKeysDao
 
     companion object{
         @Volatile
