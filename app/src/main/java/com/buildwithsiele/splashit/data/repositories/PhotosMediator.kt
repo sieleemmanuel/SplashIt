@@ -13,19 +13,18 @@ import com.buildwithsiele.splashit.data.repositories.MainRepository.Companion.DE
 import retrofit2.HttpException
 import java.io.InvalidObjectException
 
-@OptIn(ExperimentalPagingApi::class)
+
+@ExperimentalPagingApi
 class PhotosMediator(
     private val photosDatabase: PhotosDatabase,
     private val apiService: ApiService
-) :
-    RemoteMediator<Int, Photo>() {
-    val photosDao = photosDatabase.photosDao
-    val remoteKeysDao = photosDatabase.repoKeysDao
+) : RemoteMediator<Int, Photo>() {
+    private val photosDao = photosDatabase.photosDao
+    private val remoteKeysDao = photosDatabase.repoKeysDao
 
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Photo>): MediatorResult {
 
-        val pagedKeyData = getKeyPagedData(loadType, state)
-        val page = when (pagedKeyData) {
+        val page = when (val pagedKeyData = getKeyPagedData(loadType, state)) {
             is MediatorResult.Success -> {
                 return pagedKeyData
             }
@@ -66,17 +65,13 @@ class PhotosMediator(
                 remoteKey?.nextKey?.minus(1)?:DEFAULT_PAGE_INDEX
             }
             LoadType.PREPEND -> {
-              /*  val remoteKey = getFirstRemoteKey(state)
-                    ?: throw InvalidObjectException("Invalid  state, Key should not be null")
-                //end of list condition reached
-                remoteKey.prevKey?:*/return MediatorResult.Success(endOfPaginationReached = true)
-               /* remoteKey.prevKey*/
+                return MediatorResult.Success(endOfPaginationReached = true)
+
             }
             LoadType.APPEND -> {
                 val remoteKey = getLastRemoteKey(state)
-                    ?:throw InvalidObjectException("Remote Key Should not be null for $loadType")
-                remoteKey.nextKey ?:return MediatorResult.Success(endOfPaginationReached = true)
-               /* remoteKey.nextKey*/
+                    ?:getFirstRemoteKey(state)
+                remoteKey?.nextKey ?:return MediatorResult.Success(endOfPaginationReached = true)
             }
         }
     }
