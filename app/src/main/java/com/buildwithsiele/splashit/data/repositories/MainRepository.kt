@@ -9,22 +9,29 @@ import com.buildwithsiele.splashit.data.network.ApiService
 @ExperimentalPagingApi
 class MainRepository(private val photosDatabase: PhotosDatabase, private val apiService: ApiService) {
 
-     fun getPhotosResultsStream():LiveData<PagingData<Photo>>{
+     fun getPhotosResultsStream(query: String):LiveData<PagingData<Photo>>{
         val pagingSourceFactory = { photosDatabase.photosDao.getAllPhotos() }
-        val pagingConfig = PagingConfig(PAGE_SIZE, enablePlaceholders = true)
+        val pagingConfig = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false)
+             return Pager(
+                 config = pagingConfig,
+                 remoteMediator = PhotosMediator(photosDatabase,apiService,query),
+                 pagingSourceFactory = pagingSourceFactory
+             ).liveData
+    }
+
+    fun getSearchResultsStream(query:String):LiveData<PagingData<Photo>>{
+        val pagingSourceFactory = { PagingPhotoSource(apiService, query) }
+        val pagingConfig = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false)
         return Pager(
             config = pagingConfig,
-            remoteMediator = PhotosMediator(photosDatabase,apiService),
             pagingSourceFactory = pagingSourceFactory
         ).liveData
-
     }
-    suspend fun localStorageExist():Boolean = photosDatabase.photosDao.localStorageExist()
 
     val photoList = photosDatabase.photosDao.getPhotosList()
 
     companion object{
-        const val PAGE_SIZE = 3
+        const val PAGE_SIZE = 15
         const val DEFAULT_PAGE_INDEX = 1
     }
 }

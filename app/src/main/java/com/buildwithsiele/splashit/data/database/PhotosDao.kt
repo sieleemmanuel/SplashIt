@@ -19,5 +19,9 @@ interface PhotosDao {
     fun getPhotosList(): LiveData<List<Photo>>
 
     @Query("DELETE FROM photos_table")
-    fun deleteAll()
+    suspend fun deleteAll()
+    @Query("SELECT EXISTS(SELECT * FROM photos_table)")
+    suspend fun localStorageExist():Boolean
+
+
 }

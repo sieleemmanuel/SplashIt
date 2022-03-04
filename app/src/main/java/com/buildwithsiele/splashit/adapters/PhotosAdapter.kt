@@ -1,6 +1,5 @@
 package com.buildwithsiele.splashit.adapters
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,13 +14,6 @@ import com.squareup.picasso.Picasso
 
 class PhotosAdapter (private val itemClickListener: ItemClickListener)
     : PagingDataAdapter<Photo,PhotosAdapter.ImagesViewHolder>(DiffUtilCallback()) {
-
-    var photosList = listOf<Photo>()
-        @SuppressLint("NotifyDataSetChanged")
-        set(value) {
-            field = value
-            notifyDataSetChanged()
-        }
 
     class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageName: TextView = itemView.findViewById(R.id.image_name)
@@ -41,7 +33,12 @@ class PhotosAdapter (private val itemClickListener: ItemClickListener)
     override fun onBindViewHolder(holder: ImagesViewHolder, position: Int) {
         val photo = getItem(position)
         holder.imageName.text = photo?.id
-        Picasso.get().load(photo?.urls?.urlRegular).placeholder(R.drawable.progress_animation).into(holder.imageView)
+
+        Picasso.get()
+            .load(photo?.urls?.urlSmall)
+            .placeholder(R.drawable.progress_animation)
+            .into(holder.imageView)
+
         holder.itemView.setOnClickListener {
             itemClickListener.onClick(photo!!,position)
         }

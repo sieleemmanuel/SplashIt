@@ -19,7 +19,10 @@ data class Photo(
     @ColumnInfo(name = "height") val height: Int,
 
     @SerializedName("urls")
-    @ColumnInfo(name = "url") val urls: UnsplashURL
+    @ColumnInfo(name = "url") val urls: UnsplashURL,
+
+    @SerializedName("links")
+@ColumnInfo(name = "links") val download: DownloadUrl
 
 )
 
@@ -29,6 +32,10 @@ data class UnsplashURL(
     @SerializedName("regular")
     val urlRegular: String
 )
+data class DownloadUrl(
+    @SerializedName("download")
+    val download: String,
+)
 
 class Converter {
     @TypeConverter
@@ -37,4 +44,11 @@ class Converter {
     @TypeConverter
     fun fromJson(value: String): UnsplashURL =
         (Gson().fromJson(value, UnsplashURL::class.java) as UnsplashURL)
+
+    @TypeConverter
+    fun toJsonDownloadUrl(value: DownloadUrl?): String = Gson().toJson(value)
+
+    @TypeConverter
+    fun fromJsonDownloadUrl(value: String): DownloadUrl =
+        (Gson().fromJson(value, DownloadUrl::class.java) as DownloadUrl)
 }

@@ -4,7 +4,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.TextView
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.core.view.isVisible
 import androidx.paging.LoadState
 import androidx.paging.LoadStateAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -23,12 +25,13 @@ LoadStateAdapter<LoaderStateAdapter.LoaderViewHolder>(){
 
     class LoaderViewHolder(view: View, retry: () -> Unit) : RecyclerView.ViewHolder(view){
 
+        val btnRetry:Button = view.findViewById(R.id.btnRetry)
+        val errorMessage:TextView = view.findViewById(R.id.tvError)
         companion object{
             // instance of loaderViewHolder
             fun getInstance(parent: ViewGroup,retry: () -> Unit):LoaderViewHolder{
                 val inflater = LayoutInflater.from(parent.context).inflate(R.layout.item_photo_loader, parent, false)
                 return LoaderViewHolder(inflater,retry)
-
             }
         }
         private val motionLayout:MotionLayout = view.findViewById(R.id.mlLoader)

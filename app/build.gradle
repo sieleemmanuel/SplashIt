@@ -17,6 +17,12 @@ android {
         multiDexEnabled true
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        def propertiesFile = rootProject.file('local.properties')
+        Properties properties = new Properties()
+        properties.load(new FileInputStream(propertiesFile))
+
+        buildConfigField ('String','UNSPLASH_API_KEY',  properties['UNSPLASH_API_KEY'])
     }
 
     buildTypes {
@@ -71,6 +77,7 @@ dependencies {
     //Room
     implementation "androidx.room:room-ktx:$room_version"
     kapt ("androidx.room:room-compiler:$room_version")
+
     //Coroutine
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.5.0"
 

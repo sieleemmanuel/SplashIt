@@ -10,7 +10,8 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".ui.main.view.PhotoDetails">
+        tools:context=".ui.view.PhotoDetails"
+        android:background="#E8292727">
 
         <androidx.viewpager2.widget.ViewPager2
             android:id="@+id/photoViewpager"
@@ -19,7 +20,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"/>
+            app:layout_constraintTop_toTopOf="parent"
+            android:clipChildren="false"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
