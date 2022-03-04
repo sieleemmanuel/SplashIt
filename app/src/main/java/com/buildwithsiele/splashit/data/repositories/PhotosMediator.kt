@@ -1,5 +1,8 @@
 package com.buildwithsiele.splashit.data.repositories
 
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -11,30 +14,35 @@ import com.buildwithsiele.splashit.data.model.RemoteKeys
 import com.buildwithsiele.splashit.data.network.ApiService
 import com.buildwithsiele.splashit.data.repositories.MainRepository.Companion.DEFAULT_PAGE_INDEX
 import retrofit2.HttpException
-import java.io.InvalidObjectException
 
 
 @ExperimentalPagingApi
 class PhotosMediator(
     private val photosDatabase: PhotosDatabase,
-    private val apiService: ApiService
+    private val apiService: ApiService,
+    private val query:String
 ) : RemoteMediator<Int, Photo>() {
     private val photosDao = photosDatabase.photosDao
     private val remoteKeysDao = photosDatabase.repoKeysDao
+    private lateinit var response: List<Photo>
 
+    @RequiresApi(Build.VERSION_CODES.M)
     override suspend fun load(loadType: LoadType, state: PagingState<Int, Photo>): MediatorResult {
 
         val page = when (val pagedKeyData = getKeyPagedData(loadType, state)) {
             is MediatorResult.Success -> {
                 return pagedKeyData
             }
-            else -> pagedKeyData as Int
+            else -> pagedKeyData!! as Int
         }
         return try {
-            val response = apiService.getPhotos(page = page, per_page = state.config.pageSize)
+            response = if (query.isEmpty()) {
+                apiService.getPhotos(page = page)
+            }else {
+                apiService.search(query = query, page = page).results
+            }
             val isEndOfList = response.isEmpty()
             photosDatabase.withTransaction {
-                
                 //clear all the tables in database
             if (loadType == LoadType.REFRESH) {
                 photosDao.deleteAll()
@@ -66,21 +74,14 @@ class PhotosMediator(
             }
             LoadType.PREPEND -> {
                 return MediatorResult.Success(endOfPaginationReached = true)
-
             }
             LoadType.APPEND -> {
                 val remoteKey = getLastRemoteKey(state)
-                    ?:getFirstRemoteKey(state)
-                remoteKey?.nextKey ?:return MediatorResult.Success(endOfPaginationReached = true)
+               if (remoteKey?.nextKey==null)
+                   return MediatorResult.Success(endOfPaginationReached = true)
+                remoteKey.nextKey
             }
         }
-    }
-
-    private suspend fun getFirstRemoteKey(state: PagingState<Int, Photo>): RemoteKeys? {
-        return state.firstItemOrNull()
-            ?.let { photo ->
-                remoteKeysDao.getRemoteKeysPhotoID(photo.id)
-            }
     }
 
     private suspend fun getLastRemoteKey(state: PagingState<Int, Photo>): RemoteKeys? {

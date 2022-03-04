@@ -6,7 +6,7 @@ import com.buildwithsiele.splashit.data.model.Photo
 import com.buildwithsiele.splashit.data.network.ApiService
 import retrofit2.HttpException
 
-class PagingPhotoSource(private val apiService: ApiService): PagingSource<Int,Photo>() {
+class PagingPhotoSource(private val apiService: ApiService,  private val query:String): PagingSource<Int,Photo>() {
     override fun getRefreshKey(state: PagingState<Int, Photo>): Int? {
         return state.anchorPosition
     }
@@ -14,9 +14,9 @@ class PagingPhotoSource(private val apiService: ApiService): PagingSource<Int,Ph
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Photo> {
        val page = params.key?: DEFAULT_PAGE_INDEX
         return try {
-            val response = apiService.getPhotos(page = page)
+            val response = apiService.search(page = page, query = query).results
             LoadResult.Page(
-                response, //or data = response
+                response,
                 prevKey = if (page == DEFAULT_PAGE_INDEX) null else page -1,
                 nextKey = if (response.isEmpty()) null else page +1
             )
