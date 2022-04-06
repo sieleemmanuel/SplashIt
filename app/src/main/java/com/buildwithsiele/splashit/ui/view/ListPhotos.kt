@@ -93,15 +93,16 @@ class ListPhotos : Fragment() {
             override fun onQueryTextSubmit(query: String?): Boolean {
                 if (!NetworkConnection(requireContext()).isNetworkAvailable()){
                     Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show()
-
-                }else searchPhotos(query)
+                }else {
+                    searchPhotos(query)
+                }
                 return true
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }
         })
+        searchViewItem.isIconfiedByDefault
     }
 
     private fun searchPhotos(query: String?) {
