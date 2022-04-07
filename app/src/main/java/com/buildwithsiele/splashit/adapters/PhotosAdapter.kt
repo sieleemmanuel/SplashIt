@@ -15,7 +15,7 @@ import com.squareup.picasso.Picasso
 class PhotosAdapter (private val itemClickListener: ItemClickListener)
     : PagingDataAdapter<Photo,PhotosAdapter.ImagesViewHolder>(DiffUtilCallback()) {
 
-    class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+   inner class ImagesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val imageName: TextView = itemView.findViewById(R.id.image_name)
         val imageView: ImageView = itemView.findViewById(R.id.imageView)
 

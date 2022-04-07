@@ -89,15 +89,21 @@ class ListPhotos : Fragment() {
         val searchItem = menu.findItem(R.id.actionSearch)
         val searchViewItem = searchItem.actionView as SearchView
 
+        setUpSearchView(searchViewItem)
+    }
+
+    private fun setUpSearchView(searchViewItem: SearchView) {
         searchViewItem.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String?): Boolean {
-                if (!NetworkConnection(requireContext()).isNetworkAvailable()){
-                    Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT).show()
-                }else {
+                if (!NetworkConnection(requireContext()).isNetworkAvailable()) {
+                    Toast.makeText(requireContext(), "No internet connection", Toast.LENGTH_SHORT)
+                        .show()
+                } else {
                     searchPhotos(query)
                 }
                 return true
             }
+
             override fun onQueryTextChange(newText: String?): Boolean {
                 return false
             }

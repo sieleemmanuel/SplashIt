@@ -19,14 +19,14 @@ class MainRepository(private val photosDatabase: PhotosDatabase, private val api
              ).liveData
     }
 
-    fun getSearchResultsStream(query:String):LiveData<PagingData<Photo>>{
+    /*fun getSearchResultsStream(query:String):LiveData<PagingData<Photo>>{
         val pagingSourceFactory = { PagingPhotoSource(apiService, query) }
         val pagingConfig = PagingConfig(pageSize = PAGE_SIZE, enablePlaceholders = false)
         return Pager(
             config = pagingConfig,
             pagingSourceFactory = pagingSourceFactory
         ).liveData
-    }
+    }*/
 
     val photoList = photosDatabase.photosDao.getPhotosList()
 
