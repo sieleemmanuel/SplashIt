@@ -126,8 +126,7 @@ class PhotoDetails : Fragment() {
     }
 
     private fun saveImageToCacheAndGetUri(): Uri? {
-        val imgView =
-            binding.photoViewpager.findViewWithTag<ImageView>(binding.photoViewpager.currentItem)
+        val imgView = binding.photoViewpager.findViewWithTag<ImageView>(binding.photoViewpager.currentItem)
         imageToShare = imgView.drawable.toBitmap()
         currentPhoto = adapter.currentList[binding.photoViewpager.currentItem]
 
